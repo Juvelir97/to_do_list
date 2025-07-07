@@ -8,7 +8,7 @@ class StatusEnum(str, Enum):
     in_progress = "in_progress"
     done = "done"
 
-class TodoItem(BaseModel):
+class TodoItemBase(BaseModel):
     title: str
     status: StatusEnum
     start_date: datetime
@@ -21,3 +21,11 @@ class TodoItem(BaseModel):
             raise ValueError('end_date must be after start_date')
         return self
 
+class TodoItemCreate(TodoItemBase):
+    pass
+
+class TodoItem(TodoItemBase):
+    id: int
+    
+    class Config:
+        from_attributes = True
