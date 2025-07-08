@@ -24,6 +24,12 @@ class TodoItemBase(BaseModel):
 class TodoItemCreate(TodoItemBase):
     pass
 
+class TodoUpdate(BaseModel):
+    title : Optional[str] = None
+    status: Optional[StatusEnum] = None
+    start_date: Optional[datetime] = None
+    
+    
 class TodoItem(TodoItemBase):
     id: int
     

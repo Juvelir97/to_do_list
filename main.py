@@ -1,5 +1,5 @@
 from fastapi import FastAPI,HTTPException
-from models import TodoItem, TodoItemCreate
+from models import TodoItem, TodoItemCreate, TodoUpdate
 
 app = FastAPI()
 
@@ -24,7 +24,7 @@ async def show_todos(id: int):
 def show_todos():
     return {"message" : "your todos list" , "list" : todo_list}
 
-@app.delete("/todos/delete/{id}")
+@app.delete("/todos/{id}")
 def delete_item(id : int):
     if id < 0:
         raise ValueError("Id cannot be negative")
@@ -37,11 +37,16 @@ def delete_item(id : int):
         raise HTTPException(status_code=404,detail=f"To-do item not found {id} - {todo.id}")
 
 @app.put("/todos/{id}", response_model=TodoItem)
-def replace_item(id:int,update_item: TodoItem):
-    for index,item in enumerate(todo_list):
+def replace_item(id:int,update_item: TodoUpdate):
+    for item in todo_list:
         if item.id == id:
-            todo_list[index] = update_item
-            return update_item
+            updated_data = item.model_dump()
+            update_dict = update_item.model_dump(exclude_unset=True)
+            #update_item = TodoItem(id=item.id,**update_item.model_dump(ex))
+            updated_data.update(update_dict)
+            updated_todo = TodoItem(**updated_data)
+            todo_list[todo_list.index(item)] = updated_todo
+            return updated_todo
     raise HTTPException(status_code=404,detail='To-do item not found')
 
 
