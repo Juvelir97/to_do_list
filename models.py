@@ -17,7 +17,7 @@ class TodoItemBase(BaseModel):
 
     @model_validator(mode='after')
     def check_dates(self):
-        if self.start_date < self.end_date:
+        if self.start_date > self.end_date:
             raise ValueError('end_date must be after start_date')
         return self
 

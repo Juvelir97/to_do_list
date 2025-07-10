@@ -1,6 +1,18 @@
 {% extends "main.html" %}
 
 {% block crud_container %}
+    {% if item %}
+    <article class="card container-fluid">
+        <br/>
+        <h2>ID: {{ item.id }}</h2>
+        <p>
+            <strong>Title: {{ item.title }}</strong><br>
+            <strong>Description: {{ item.description }}</strong><br>
+            <strong>Status: {{ item.status.split('.')[-1] }}</strong><br>
+            <strong>Start Time: {{ item.start_date.strftime('%H:%M %Y-%m-%d') }}</strong><br>
+        </p>
+    </article>
+    {% else %}
     <section class="container-fluid">
         <h2>ToDo List</h2>
         <br>
@@ -12,4 +24,5 @@
             </ul>
         </div>
     </section>
+    {% endif %}
 {% endblock %}

@@ -15,17 +15,17 @@ async def read_root(request: Request):
 
 
 @app.get("/todos/{id}", response_model=TodoItem)
-async def show_todos(id: int):
+async def show_todos(id: int,request: Request):
     for todo in todo_list:
         if todo.id == id:
-            return todo
+            return templates.TemplateResponse("message.html", {"request": request, "item": todo })
     raise HTTPException(status_code = 404,\
                         detail = f"item number {id} not found")
-
+"""
 @app.get("/todos")
 def show_todos():
     return {"message" : "your todos list" , "list" : todo_list}
-
+"""
 @app.delete("/todos/{id}")
 def delete_item(id : int):
     if id < 0:
