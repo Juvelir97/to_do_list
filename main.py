@@ -1,15 +1,17 @@
-from fastapi import FastAPI,HTTPException
+from fastapi import FastAPI,HTTPException,Request
 from models import TodoItem, TodoItemCreate, TodoUpdate
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
+templates = Jinja2Templates(directory='templates')
 
 todo_list = []
 next_id = 1
 
 
 @app.get("/")
-async def read_root():
-    return {"message": "Welcome to my To-Do list"}
+async def read_root(request: Request):
+    return templates.TemplateResponse("message.html", {"request": request, "todo_list": todo_list })
 
 
 @app.get("/todos/{id}", response_model=TodoItem)
