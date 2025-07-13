@@ -1,28 +1,59 @@
 {% extends "main.html" %}
 
 {% block crud_container %}
-    {% if item %}
-    <article class="card container-fluid">
-        <br/>
-        <h2>ID: {{ item.id }}</h2>
-        <p>
-            <strong>Title: {{ item.title }}</strong><br>
-            <strong>Description: {{ item.description }}</strong><br>
-            <strong>Status: {{ item.status.split('.')[-1] }}</strong><br>
-            <strong>Start Time: {{ item.start_date.strftime('%H:%M %Y-%m-%d') }}</strong><br>
-        </p>
-    </article>
-    {% else %}
-    <section class="container-fluid">
-        <h2>ToDo List</h2>
-        <br>
-        <div class="card">
-            <ul class="list-group list-group-flush">
-                {% for item in todo_list %}
-                <li class="list-group-item">{{ item.id }}. <a href="/todos/{{item.id}}">{{ item.title }}</a></li>
-                {% endfor %}
-            </ul>
+<section class="container-fluid"></section>
+<div style="
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 400px;
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 2em;
+">
+    <form method="post" action="/" style="max-width: 400px;">
+        <div class="col-auto">
+            <div style="margin-bottom: 1em;">
+                <input type="text" name="title" value="{{ title }}" class="form-control"
+                       placeholder="Add new ToDo item" aria-label="Add item"
+                       aria-describedby="button-addon2" required/>
+            </div>
+            <div style="margin-bottom: 1em;">
+                <textarea name = "description" value="{{ description }}"
+                          placeholder="Description" style="width: 100%;"></textarea>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-outline-primary" type="submit" id="button-addon2"
+                        data-mdb-ripple-color="dark">Add
+                </button>
+            </div>
+            </div>
         </div>
-    </section>
-    {% endif %}
+    </form>
+</div>
+</section>
+{% if item %}
+<article class="card container-fluid">
+    <br/>
+    <h2>ID: {{ item.id }}</h2>
+    <p>
+        <strong>Title: {{ item.title }}</strong><br>
+        <strong>Description: {{ item.description }}</strong><br>
+        <strong>Status: {{ item.status.split('.')[-1] }}</strong><br>
+        <strong>Start Time: {{ item.start_date.strftime('%H:%M %Y-%m-%d') }}</strong><br>
+    </p>
+</article>
+{% else %}
+<section class="container-fluid">
+    <h2>ToDo List</h2>
+    <br>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for item in todo_list %}
+            <li class="list-group-item">{{ item.id }}. <a href="/todos/{{item.id}}">{{ item.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endif %}
 {% endblock %}

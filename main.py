@@ -1,4 +1,4 @@
-from fastapi import FastAPI,HTTPException,Request
+from fastapi import FastAPI,HTTPException,Request,Form
 from models import TodoItem, TodoItemCreate, TodoUpdate
 from fastapi.templating import Jinja2Templates
 
@@ -52,11 +52,10 @@ def replace_item(id:int,update_item: TodoUpdate):
     raise HTTPException(status_code=404,detail='To-do item not found')
 
 
-@app.post('/todos/',response_model=TodoItem)
-async def create_todo(item: TodoItemCreate):
+@app.post('/',response_model=TodoItem)
+async def create_todo(request: Request, title: str = Form(),description: str = Form()):
     global next_id
-    todo = TodoItem(id=next_id, **item.model_dump())
+    todo = TodoItem(id=next_id, title=title, description=description)
     next_id += 1
-    print(f"Returning: {todo.model_dump()}")
     todo_list.append(todo)
-    return todo
+    return templates.TemplateResponse("message.html", {"request": request, "todo_list": todo_list})
