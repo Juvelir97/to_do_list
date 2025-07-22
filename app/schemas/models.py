@@ -29,9 +29,14 @@ class TodoUpdate(BaseModel):
     status: Optional[StatusEnum] = None
     start_date: Optional[datetime] = None
     
-    
-class TodoItem(TodoItemBase):
-    id: int
-    
+class TodoResponse(TodoItemBase):
+    id:int
+    status: StatusEnum
+    created_at: datetime
+    updated_at: datetime
+
     class Config:
         from_attributes = True
+
+class TodoStatusUpdate(BaseModel):
+    status: StatusEnum
