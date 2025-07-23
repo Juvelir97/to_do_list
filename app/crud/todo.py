@@ -23,3 +23,13 @@ def delete_todo(db: Session, todo_id:int):
         db.commit()
         return True
     return False
+
+def update_todo(db:Session, todo_id:int, update_item:TodoUpdate):
+    db_todo = db.query(Items).filter(Items.id == todo_id).first()
+    if db_todo:
+        update_data = update_item.model_dump(exclude_unset=True)
+        for field,value in update_data.items():
+            setattr(db_todo,field,value)
+        db.commit()
+        db.refresh(db_todo)
+    return db_todo
