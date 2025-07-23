@@ -31,23 +31,16 @@ async def show_todos(id: int,request: Request,db: Session = Depends(get_db)):
     
     return templates.TemplateResponse("message.html", {"request": request, "item": todo })
     
-"""
-@app.get("/todos")
-def show_todos():
-    return {"message" : "your todos list" , "list" : todo_list}
 
 @router.delete("/todos/{id}")
-def delete_item(id : int):
+def delete_item(id : int,db:Session=Depends(get_db)):
     if id < 0:
         raise ValueError("Id cannot be negative")
     else:
-        for index,todo in enumerate(todo_list):
-            if todo.id == id:
-                removed_item = todo_list.pop(index)
-                return removed_item.title
-        
-        raise HTTPException(status_code=404,detail=f"To-do item not found {id} - {todo.id}")
-
+        if crud_todo.delete_todo(db,id):
+                return {"message": f"Item {id} has been deleted"}
+        raise HTTPException(status_code=404,detail=f"To-do item with id {id} not found")
+"""
 @router.put("/todos/{id}", response_model=TodoItem)
 def replace_item(id:int,update_item: TodoUpdate):
     for item in todo_list:
@@ -63,7 +56,7 @@ def replace_item(id:int,update_item: TodoUpdate):
 
 """
 @router.post('/',response_model=TodoItemCreate)
-async def create_todo(request: Request, title: str = Form(),description: str = Form(),db:Session=Depends(get_db)):
+async def create_todo(title: str = Form(),description: str = Form(),db:Session=Depends(get_db)):
     todo = TodoItemCreate(title=title, description=description)
     crud_todo.create_todo(db,todo)
     return RedirectResponse(url="/",status_code=303) 

@@ -16,3 +16,10 @@ def create_todo(db: Session, todo: TodoItemCreate):
     db.refresh(db_todo)
     return db_todo
 
+def delete_todo(db: Session, todo_id:int):
+    db_todo = db.query(Items).filter(Items.id == todo_id).first()
+    if db_todo:
+        db.delete(db_todo)
+        db.commit()
+        return True
+    return False
